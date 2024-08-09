@@ -1,9 +1,15 @@
-# Vous devez remplacer le contenu de ce fichier par votre propre code
-# tel qu'indiqué dans la description du TP2.  Le code ici correspond
-# à l'exemple donné dans la description.
+# Fichier: TP2.py
+# Auteurs: Léa H. et Grace T.
+# Date: 2024-08-08
+
+# Ce programme imite le comportement du jeu "La somme des symboles". Le but du joueur est de rechercher les nombres 
+# associés à cinq symboles dans une grille 5 x 5. À la fin de chaque rangée et de chaque colonne se trouvent les sommes
+# des cinq chiffres au total.  
+
 import math
 import random
 
+# Fonction qui conçoit au hasard cinq entiers entre 1 et 20 
 def entiersrandom(): 
    listRandom = []
    for _ in range(5):
@@ -13,16 +19,8 @@ def entiersrandom():
    return listRandom 
     
 
-def matcherVars(symboles, listRandom):
-   listMatch = []
-   for i in range(5):
-    var = []
-    var += (symboles[i], listRandom[i])
-    listMatch.append(var)
-
-   return listMatch
-    
-
+# Fonction qui crée une liste contenant cinq sous-listes de symboles 
+# qui sert de base pour la grille 
 def creerGrille(symboles):
     grille = []
     for _ in range(5):
@@ -35,6 +33,8 @@ def creerGrille(symboles):
     
     return grille
 
+
+# Fonction
 def afficherSommes(listEntiers, grille, symboles):
     listeSommesRangee = []
     for rangee in grille:
@@ -80,6 +80,7 @@ def changerHTML(grille, listeSommesCols, listeSommesRangee):
             height: 80%;
         }
       </style>
+      <button onclick="init()">Nouvelle partie</button>
       <div id="jeu">
       <table>\n
       """
@@ -89,7 +90,7 @@ def changerHTML(grille, listeSommesCols, listeSommesRangee):
     sousliste = grille[i]
     html += """<tr>\n"""
     for item in sousliste:
-        html += """<td id="case""" + str(caseNbre) + """">""" + """<img src="symboles/""" + str(item) + """.svg"></td>\n"""
+        html += """<td id="case""" + str(caseNbre) + """" onclick="clic()"><img src="symboles/""" + str(item) + """.svg"></td>\n"""
         caseNbre += 1
     html += """<td>""" + str(listeSommesRangee[i]) + """</td>\n"""
     html += """</tr>\n"""  
@@ -101,6 +102,12 @@ def changerHTML(grille, listeSommesCols, listeSommesRangee):
    html += """</table></div>"""  
 
    return html
+
+def clic():
+    valeur = input("Entrez un nombre entre 1 et 20:")
+    
+   
+   
 
 def init():
     symboles = ["penta", "pyramide", "cube", "star","circle"]
