@@ -136,4 +136,4 @@ def init():
     listeSommesRangee, listeSommesCols = afficherSommes(listEntiers, grille, symboles) 
 
     main = document.querySelector("#main")
-    main.innerHTML = changerHTML(grille, listeSommesCols, listeSommesRangee)
+     main = document.querySelector("#main")    main.innerHTML = changerHTML(grille, listeSommesCols, listeSommesRangee)
