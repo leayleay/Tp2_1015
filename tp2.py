@@ -22,6 +22,8 @@ def entiersrandom():
 # Fonction qui crée une liste contenant cinq sous-listes de symboles 
 # qui sert de base pour la grille 
 def creerGrille(symboles):
+    global grille
+
     grille = []
     for _ in range(5):
         rangee = []
@@ -34,15 +36,19 @@ def creerGrille(symboles):
     return grille
 
 
-# Fonction
+# Fonction qui calcule les sommes de chaque rangée et colonne et
+# les met dans une liste 
 def afficherSommes(listEntiers, grille, symboles):
     listeSommesRangee = []
+
+    # Sommes des rangées
     for rangee in grille:
         somme = 0
         for symbole in rangee:
             somme += retournerValeur(listEntiers, symboles, symbole)
         listeSommesRangee.append(somme)
 
+    # Sommes des colonnes 
     listeSommesCols = []
     for j in range(5): 
         somme = 0
@@ -52,11 +58,15 @@ def afficherSommes(listEntiers, grille, symboles):
 
     return listeSommesRangee, listeSommesCols  
 
+
+# Fonction qui retourne la valeur d'un symbole 
 def retournerValeur(listMatch, symboles, symbole):
    for i in range(5):
       if symboles[i] == symbole :
          return listMatch[i]
 
+
+# Fonction qui génère le code HMTL de la grille et qui le change dépendant de son état
 def changerHTML(grille, listeSommesCols, listeSommesRangee): 
    caseNbre = 0
    html = """
@@ -85,16 +95,19 @@ def changerHTML(grille, listeSommesCols, listeSommesRangee):
       <table>\n
       """
    
-
+    # Génère la grille 5 x 5 avec ses symboles respectives
    for i in range(5):
     sousliste = grille[i]
     html += """<tr>\n"""
     for item in sousliste:
-        html += """<td id="case""" + str(caseNbre) + """" onclick="clic()"><img src="symboles/""" + str(item) + """.svg"></td>\n"""
+        html += """<td id="symb""" + str(item) + """" onclick="clic('""" + str(item) + """')"><img src="symboles/""" + str(item) + """.svg"></td>\n"""
         caseNbre += 1
+
+    # Ajouter les sommes des rangées     
     html += """<td>""" + str(listeSommesRangee[i]) + """</td>\n"""
     html += """</tr>\n"""  
 
+    # Ajoute les sommes des colonnes
     html += """<tr>\n"""  
    for sommeCol in listeSommesCols:
       html += """<td>""" + str(sommeCol) + """</td>\n"""
@@ -103,12 +116,19 @@ def changerHTML(grille, listeSommesCols, listeSommesRangee):
 
    return html
 
-def clic():
-    valeur = input("Entrez un nombre entre 1 et 20:")
-    
-   
-   
 
+# Fonction qui demande à l'utilisateur d'entrer leur valeur choisie
+def clic(symbole):
+    valeur = input("Entrez un nombre entre 1 et 20:")
+    changer(symbole, valeur)
+
+# Ajoute à chaque symbole la valeur dont l'utilisateur a entré
+def changer(symbole, valeur):    
+    msg = document.querySelector("'#symb" + str(symbole) + "'")
+    msg.innerHTML = valeur 
+
+
+# Fonction principale 
 def init():
     symboles = ["penta", "pyramide", "cube", "star","circle"]
     listEntiers = entiersrandom()
