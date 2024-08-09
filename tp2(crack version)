@@ -1,0 +1,105 @@
+import math
+import random
+
+# Generate 5 random integers between 1 and 20
+def entiersrandom():
+    return [random.randint(1, 20) for _ in range(5)]
+
+# Match symbols with their corresponding random integers
+def matcherVars(symboles, listRandom):
+    return dict(zip(symboles, listRandom))
+
+# Create a 5x5 grid filled with randomly selected symbols
+def creerGrille(symboles):
+    return [[random.choice(symboles) for _ in range(5)] for _ in range(5)]
+
+# Calculate the sums of rows and columns based on the current grid configuration
+def afficherSommes(symboles_vals, grille):
+    listeSommesRangee = [sum(symboles_vals[symbole] for symbole in rangee) for rangee in grille]
+    listeSommesCols = [sum(symboles_vals[grille[i][j]] for i in range(5)) for j in range(5)]
+    return listeSommesRangee, listeSommesCols
+
+# Generate the HTML to display the grid, including the sums and interactive elements
+def changerHTML(grille, listeSommesCols, listeSommesRangee):
+    html = """
+      <style>
+        #jeu table { float: none; }
+        #jeu table td {
+            border: 1px solid black; 
+            padding: 1px 2px;
+            width: 80px;
+            height: 80px;
+            font-family: Helvetica; 
+            font-size: 20px; 
+            text-align: center;
+        }
+        #jeu table td img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            object-fit: contain;
+            width: 80%;
+            height: 80%;
+        }
+      </style>
+      <div id="jeu">
+      <table>\n
+    """
+    caseNbre = 0
+    for i in range(5):
+        html += """<tr>\n"""
+        for symbole in grille[i]:
+            html += f"""<td id="case{caseNbre}"><img src="symboles/{symbole}.svg"></td>\n"""
+            caseNbre += 1
+        html += f"""<td>{listeSommesRangee[i]}</td>\n"""
+        html += """</tr>\n"""  
+
+    html += """<tr>\n"""  
+    for sommeCol in listeSommesCols:
+        html += f"""<td>{sommeCol}</td>\n"""
+    html += """<td></td>\n</tr>\n""" 
+    html += """</table></div>"""  
+
+    return html
+
+# Initialize the game and render the initial grid and controls
+def init():
+    symboles = ["penta", "pyramide", "cube", "star", "circle"]
+    listEntiers = entiersrandom()
+    symboles_vals = matcherVars(symboles, listEntiers)
+    grille = creerGrille(symboles)
+    listeSommesRangee, listeSommesCols = afficherSommes(symboles_vals, grille)
+
+    main = document.querySelector("#main")
+    main.innerHTML = changerHTML(grille, listeSommesCols, listeSommesRangee)
+
+    # Add the button and input fields for user interaction
+    main.innerHTML += """
+    <br>
+    <input type="number" id="userInput" min="1" max="20">
+    <button onclick="init()">Nouvelle partie</button>
+    <p id="message"></p>
+    """
+
+# Handle the user's input and update the grid accordingly
+def play():
+    input_value = int(document.querySelector("#userInput").value)
+
+    # Generate random numbers and symbols for the new round
+    symboles = ["penta", "pyramide", "cube", "star", "circle"]
+    listEntiers = entiersrandom()
+    symboles_vals = matcherVars(symboles, listEntiers)
+    grille = creerGrille(symboles)
+
+    # Logic to determine if the player's guess is correct
+    correct = any(input_value == symboles_vals[sym] for sym in symboles_vals)
+    
+    if correct:
+        document.querySelector("#message").innerHTML = "Vous avez gagné!"
+    else:
+        document.querySelector("#message").innerHTML = "Vous avez perdu."
+
+    # Update the grid and sums after user input
+    listeSommesRangee, listeSommesCols = afficherSommes(symboles_vals, grille)
+    document.querySelector("#main").innerHTML = changerHTML(grille, listeSommesCols, listeSommesRangee)
+
